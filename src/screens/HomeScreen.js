@@ -1,13 +1,15 @@
-import { FlatList, StyleSheet, Text, View,Image } from 'react-native'
+import { FlatList, StyleSheet, Text, View,Image, TouchableOpacity } from 'react-native'
 import React,{useEffect,useState} from 'react'
 import { SearchBar } from '@rneui/themed'
 import api from '../api/api'
+import { useNavigation } from '@react-navigation/native'
+// import OnBoard from './OnBoard'
 // import { Image } from '@rneui/base'
 
 const HomeScreen = () => {
     const [data,setData]=useState([])
     const [search,setSearch]=useState('')
-
+    const nav=useNavigation();
     const fireApi=async()=>{
         try{
             const response=await api.get('/movie')
@@ -25,6 +27,10 @@ const HomeScreen = () => {
     const filteredData=data.filter((item)=>
         item.title.toLowerCase().includes(search.toLowerCase())
     )
+    const onPressSignIn=()=>{
+        // console.log('here')
+        nav.navigate('OnBoard');
+    }
 
     const renderListItem=({item})=>{
         // console.log(item)
@@ -38,6 +44,18 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
+    <View style={{flexDirection:'row',}}>
+        <View style={{flex:0.7,paddingHorizontal:20,paddingVertical:20}}>
+            <Text style={styles.textStyle}>Home Screen</Text>
+        </View>
+        <View style={{flex:0.3,marginLeft:50,paddingVertical:10}}>
+            <TouchableOpacity onPress={onPressSignIn}>
+                <View style={styles.buttonStyle}>
+                    <Text style={{color:'white'}}>Sign In</Text>
+                </View>
+            </TouchableOpacity>
+        </View>
+    </View>
       <SearchBar
         placeholder='Search for movie name'
         lightTheme  
@@ -62,5 +80,23 @@ const styles = StyleSheet.create({
     container:{
         paddingHorizontal:10,
         paddingTop:10
+    },
+    textStyle:{
+        fontWeight:'600',
+        fontSize:18,
+        color:'black'
+    },
+    buttonStyle:{
+        width:75,
+        height:45,
+        // backgroundColor:'red',
+        borderWidth:1,
+        borderColor:'orange',
+        borderRadius:10,
+        backgroundColor:'orange',
+        alignItems:'center',
+        justifyContent:'center',
+        // marginBottom:10
+
     }
 })
